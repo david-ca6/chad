@@ -45,6 +45,7 @@ python src/chad.py serve
 
 
 ### VodTS Timestamps to Resolve ELD Marker
+For more information on LiveTS/VodTS Timestamps files:  [LiveTS extension](https://github.com/CA6-LiveTS/LiveTS-Chrome)
 ```bash
 python src/chad.py vodts2edl [vodts file] [edl file]
 ```
