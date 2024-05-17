@@ -509,12 +509,12 @@ def serve():
             html.Button('Run', id='submit-button', n_clicks=0),
         ]),
         dcc.Graph(id='output-graph'),
+        html.Div(id='url-output'),
         html.Div([
             html.Iframe(id='iframe-video', style={'width': '45%', 'height': '390px', 'display': 'inline-block'}, allow="autoplay; fullscreen"),
             html.Textarea(id='note-area', style={'width': '45%', 'height': '390px', 'display': 'inline-block', 'resize': 'none'}, placeholder='Enter your notes here...'),
         ],  style={'textAlign': 'center'}),
         html.Div(id='table-div'),
-        html.Div(id='url-output'),
 
         # garbage at the bottom
         html.Div(id='zoom-level-info')
