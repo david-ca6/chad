@@ -376,14 +376,36 @@ def display_zoom_level(relayoutData, stored_data, keyword, user):
 
 @dasher.callback(
     Output('url-output', 'children'),  # Placeholder output, necessary for callback
+    Output('iframe-video', 'src'),  # Add this output to update the iframe src
     Input('output-graph', 'clickData')
 )
 def open_url(clickData):
     if clickData:
         url = clickData['points'][0]['customdata']
-        webbrowser.open(url)  # Open URL in the default web browser
-        return f"Opened: {url}"
-    return "Click on a bar to open the URL."
+        embed_url = ""
+        
+        print("A=====================================\r\n")
+        if "youtube" in url:
+            vid_id = url.split("v=")[-1].split("&")[0]
+            timestamp = int(url.split("t=")[-1])
+            embed_url = f"https://www.youtube-nocookie.com/embed/{vid_id}?autoplay=1&start={timestamp}&rel=0&vq=hd1080"
+        elif "youtu.be" in url:
+            vid_id = url.split("/")[-1]
+            timestamp = int(url.split("t=")[-1])
+            embed_url = f"https://www.youtube-nocookie.com/embed/{vid_id}?autoplay=1&start={timestamp}&rel=0&vq=hd1080"
+        elif "twitch" in url:
+            vid_id = url.split("/")[-1].split("?")[0]
+            timestamp = url.split("t=")[-1]
+            # <iframe src="https://player.twitch.tv/?video=2146413500&time=0h51m2s&parent=127.0.0.1" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+            embed_url = f"https://player.twitch.tv/?video={vid_id}&time={timestamp}&parent=127.0.0.1"  # Change "localhost" to your domain if necessary
+        else:
+            embed_url = ""
+
+        # webbrowser.open(url)  # Open URL in the default web browser, removed, we now use embed
+
+        return f"Opened: {url}", embed_url
+    return "Click on a bar to open the URL.", ""
+
 
 @dasher.callback(
     Output('store-data', 'data'),
@@ -473,26 +495,31 @@ def update_output(n_clicks, stored_data, url, keyword, user, start_time, end_tim
 def serve():
 
     dasher.layout = html.Div([
-    html.Div([
-        html.H1(__SOFT_NAME__ + " " + __SOFT_VERSION__),
-        dcc.Store(id='store-data', storage_type='session'),
+        html.Script(src="https://www.youtube.com/iframe_api"),
+        html.Div([
+            html.H1(__SOFT_NAME__ + " " + __SOFT_VERSION__),
+            dcc.Store(id='store-data', storage_type='session'),
 
-        dcc.Input(id='input-url', type='text', placeholder='Enter URL'),
-        html.Button('Fetch Data', id='fetch-button', n_clicks=0),
-        html.Br(),
-        dcc.Input(id='input-keyword', type='text', placeholder='Enter keyword'),
-        dcc.Input(id='input-user', type='text', placeholder='Enter user'),
-        dcc.Input(id='input-start-time', type='text', placeholder='Start Time'),
-        dcc.Input(id='input-end-time', type='text', placeholder='End Time'),
-        html.Button('Run', id='submit-button', n_clicks=0),
-    ]),
-    dcc.Graph(id='output-graph'),
-    html.Div(id='url-output'),
-    html.Div(id='table-div'),
+            dcc.Input(id='input-url', type='text', placeholder='Enter URL'),
+            html.Button('Fetch Data', id='fetch-button', n_clicks=0),
+            html.Br(),
+            dcc.Input(id='input-keyword', type='text', placeholder='Enter keyword'),
+            dcc.Input(id='input-user', type='text', placeholder='Enter user'),
+            dcc.Input(id='input-start-time', type='text', placeholder='Start Time'),
+            dcc.Input(id='input-end-time', type='text', placeholder='End Time'),
+            html.Button('Run', id='submit-button', n_clicks=0),
+        ]),
+        dcc.Graph(id='output-graph'),
+        html.Div([
+            html.Iframe(id='iframe-video', style={'width': '70%', 'height': '390px', 'margin': '0 auto'}, allow="autoplay; fullscreen"),
+        ], style={'textAlign': 'center', 'padding': '20px'}),
+        # html.Iframe(id='iframe-video', src="", width="560", height="315", allow="autoplay;"),
+        html.Div(id='table-div'),
+        html.Div(id='url-output'),
 
-    # garbage at the bottom
-    html.Div(id='zoom-level-info')
-])
+        # garbage at the bottom
+        html.Div(id='zoom-level-info')
+    ])
     
     dasher.index_string = '''
         <!DOCTYPE html>
@@ -512,6 +539,8 @@ def serve():
             </body>
         </html>
         '''
+
+
     dasher.run_server(debug=True)
     return
 
