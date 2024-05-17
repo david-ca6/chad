@@ -383,8 +383,7 @@ def open_url(clickData):
     if clickData:
         url = clickData['points'][0]['customdata']
         embed_url = ""
-        
-        print("A=====================================\r\n")
+
         if "youtube" in url:
             vid_id = url.split("v=")[-1].split("&")[0]
             timestamp = int(url.split("t=")[-1])
@@ -511,9 +510,9 @@ def serve():
         ]),
         dcc.Graph(id='output-graph'),
         html.Div([
-            html.Iframe(id='iframe-video', style={'width': '70%', 'height': '390px', 'margin': '0 auto'}, allow="autoplay; fullscreen"),
-        ], style={'textAlign': 'center', 'padding': '20px'}),
-        # html.Iframe(id='iframe-video', src="", width="560", height="315", allow="autoplay;"),
+            html.Iframe(id='iframe-video', style={'width': '45%', 'height': '390px', 'display': 'inline-block'}, allow="autoplay; fullscreen"),
+            html.Textarea(id='note-area', style={'width': '45%', 'height': '390px', 'display': 'inline-block', 'resize': 'none'}, placeholder='Enter your notes here...'),
+        ],  style={'textAlign': 'center'}),
         html.Div(id='table-div'),
         html.Div(id='url-output'),
 
