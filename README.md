@@ -53,15 +53,15 @@ python src/chad.py vodts2edl [vodts file] [edl file]
 ```
 
 ### Q&A
-- Q: Why an analysis tool? Doesn't it remove the human side of clipping?
+- Q: Why an analysis tool? Doesn't it remove the human side of clipping?  
 A: the graph still needs to be analyzed by a human, it's just a different way to visualize the stream.
 There are no auto-clipping features in the tool and no automated detection of spikes since it would be like cheating.
 The tool is intended to help you find interesting moments you missed in the VOD.
 
-- Q: Why multi keyword search?
+- Q: Why multi keyword search?  
 A: By using related keywords, you can try to detect certain moods in chat, for example, "lol|lmao|lul|kek|kekw" allows you to search for funny moments in the VOD.
 
-- Q: Why the User Filter? It's creepy!
+- Q: Why the User Filter? It's creepy!  
 A: The user filter is intended to be used for bots messages (like raid or change of game on Twitch) or Translator that don't use tags in their message.
 
 ### Note
